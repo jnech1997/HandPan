@@ -48,47 +48,46 @@ public class Handpan {
 	      int len= line.length();
 	      //for each character in this line, play its corresponding handpan sound (or silence)
 	      for (int i=0; i<len; i++) {
-	    	 char c= Character.toUpperCase(line.charAt(i));
-	    	 int toNum= Character.getNumericValue(c);
-	    	 //if the char read was a letter
-	    	 if (toNum != -1) {
-	    		 //use offset so that letter's have a new arrangement of sound mappings
-	    		 int fileIndex= (Character.getNumericValue(c) + offset) % 26;
-	    		//this letter has been seen
-	    		 freqCounter[toNum - 10]++;
-		    	 try {
-		    		 //play handpan wave file letter is mapped to
-		    		 String t_file= path + "chanced-" + fileIndex + ".wav";
-		    		 InputStream in= new FileInputStream(t_file);
-		    		 AudioStream audioStream= new AudioStream(in);
-		    		 AudioPlayer.player.start(audioStream);
-		    		 //wait before playing the next sound
-		    		 Thread.sleep(130);
-		    	 }
-		    	 catch (FileNotFoundException e) {
-		    		System.out.println("Error: file not found");
-		    	 }	 
+	        char c= Character.toUpperCase(line.charAt(i));
+	    	int toNum= Character.getNumericValue(c);
+	    	//if the char read was a letter
+	    	if (toNum != -1) {
+	    	  //use offset so that letter's have a new arrangement of sound mappings
+	    	  int fileIndex= (Character.getNumericValue(c) + offset) % 26;
+	          //this letter has been seen
+	    	  freqCounter[toNum - 10]++;
+	    	    try {
+	    		  //play handpan wave file letter is mapped to
+	    		  String t_file= path + "chanced-" + fileIndex + ".wav";
+	    		  InputStream in= new FileInputStream(t_file);
+	    		  AudioStream audioStream= new AudioStream(in);
+	    		  AudioPlayer.player.start(audioStream);
+	    		  //wait before playing the next sound
+	    		  Thread.sleep(130);
+	    		 }
+	    		 catch (FileNotFoundException e) {
+	    		   System.out.println("Error: file not found");
+	    		 }	 
 	    	 }
-	    	//the char read was a symbol (i.e. comma, asterisk, period, question mark)
-	    	//"throw dice" to calculate if there should be silence
+	    	 //the char read was a symbol (i.e. comma, asterisk, period, question mark)
+	    	 //"throw dice" to calculate if there should be silence
 	    	 else {
-	    		 double prob = ThreadLocalRandom.current().nextDouble(0.0, 1.00);
-	    		 if  (prob > .70 && prob < .95) {
-	    			 Thread.sleep(140); 
-	    		 }
-	    		 else if (prob < .20) {
-	    			 Thread.sleep(420);
-	    		 }
+	    	   double prob = ThreadLocalRandom.current().nextDouble(0.0, 1.00);
+	    	   if  (prob > .70 && prob < .95) {
+	    	     Thread.sleep(140); 
+	    	   }
+	    	   else if (prob < .20) {
+	    	     Thread.sleep(420);
+	    	   }
 	    	 }
 	      }
 	    }
 	    readIn.close();
 	  }
-	  catch (Exception e)
-	  {
+	  catch (Exception e) {
 	    System.err.format("Exception occurred trying to read '%s'.", filename);
-	    e.printStackTrace();
+		e.printStackTrace();
 	  }
-	return freqCounter;
+	  return freqCounter;
 	}
 }
